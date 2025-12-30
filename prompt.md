@@ -228,7 +228,8 @@ Create 32+ FAQ items across 4 categories:
 3. **Robots.txt (`app/robots.ts`):**
    - Allow all pages
    - Disallow API routes and admin paths
-   - Reference sitemap URL
+   - Reference sitemap URL using `COMPANY_CONFIG.site.url`
+   - Example: `sitemap: '${COMPANY_CONFIG.site.url}/sitemap.xml'`
 
 4. **Image Optimization:**
    - Use Next.js Image component everywhere
