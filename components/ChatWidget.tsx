@@ -2,17 +2,32 @@
 
 import Script from 'next/script'
 
+// Extend Window interface for Salesforce Embedded Messaging
+declare global {
+  interface Window {
+    initEmbeddedMessaging?: () => void;
+    embeddedservice_bootstrap?: {
+      isInitialized?: boolean;
+      settings: {
+        language: string;
+      };
+      init: (orgId: string, deploymentId: string, url: string, options: { scrt2URL: string }) => void;
+    };
+  }
+}
+
 export default function ChatWidget() {
   return (
     <>
-      {/* First script: Initialize the function */}
       <Script
         id="embedded-messaging-init"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            function initEmbeddedMessaging() {
+            window.initEmbeddedMessaging = function () {
               try {
+                if (window.embeddedservice_bootstrap?.isInitialized) return;
+
                 embeddedservice_bootstrap.settings.language = 'en_US';
                 embeddedservice_bootstrap.init(
                   '00Dg5000002kBx3',
@@ -23,24 +38,22 @@ export default function ChatWidget() {
                   }
                 );
               } catch (err) {
-                console.error('Error loading Embedded Messaging: ', err);
+                console.error('Embedded Messaging error:', err);
               }
-            }
+            };
           `,
         }}
       />
-      
-      {/* Second script: Load bootstrap and call initEmbeddedMessaging on load */}
+
       <Script
         src="https://orgfarm-d4d03d3f06-dev-ed.develop.my.site.com/ESWSFtroop1767146249892/assets/js/bootstrap.min.js"
         strategy="afterInteractive"
         onLoad={() => {
-          if (typeof window !== 'undefined' && typeof (window as any).initEmbeddedMessaging === 'function') {
-            (window as any).initEmbeddedMessaging();
+          if (typeof window !== 'undefined' && typeof window.initEmbeddedMessaging === 'function') {
+            window.initEmbeddedMessaging();
           }
         }}
       />
     </>
   )
 }
-
