@@ -102,7 +102,7 @@ if (embeddedservice_bootstrap && embeddedservice_bootstrap.sendMessage) {
 ### Salesforce Setup Checklist:
 
 - [ ] Embedded Messaging is enabled in Salesforce Setup
-- [ ] Your domain (sfai.netlify.app) is whitelisted in CORS settings
+- [ ] Your domain (salesforce-agentforce.app) is whitelisted in CORS settings
 - [ ] The deployment is configured correctly
 - [ ] The widget script is loading without errors
 - [ ] Conversations can be created through the widget UI
